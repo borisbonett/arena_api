@@ -47,7 +47,7 @@ class Api::V1::ProductsController < ApplicationController
 
   def product_params
     # Permite recibir la foto del producto (`image`) desde el ordenador
-    params.permit(:name, :price, :image)
+    params.permit(:name, :price, :description, :image)
   end
 
   def product_with_image(product)
