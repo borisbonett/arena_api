@@ -27,6 +27,12 @@ class Api::V1::ProductsController < ApplicationController
   # PUT/PATCH /api/v1/products/:id (Solo Admin)
   def update
     if @product.update(product_params)
+
+      if @product.stock.to_i <= 0
+        render json: { errors: "El stock debe ser mayor a 0" }, status: :unprocessable_entity
+        return
+      end
+
       render json: product_with_image(@product), status: :ok
     else
       render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
@@ -47,7 +53,7 @@ class Api::V1::ProductsController < ApplicationController
 
   def product_params
     # Permite recibir la foto del producto (`image`) desde el ordenador
-    params.permit(:name, :price, :description, :image)
+    params.permit(:name, :price, :description, :image, :stock)
   end
 
   def product_with_image(product)
