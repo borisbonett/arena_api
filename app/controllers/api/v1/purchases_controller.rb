@@ -1,5 +1,7 @@
 class Api::V1::PurchasesController < ApplicationController
   # POST /api/v1/buy (Cualquier usuario autenticado)
+  skip_before_action :authorize_request, only: [:create]
+  
   def create
     @purchase = @current_user.purchases.new(purchase_params)
 
