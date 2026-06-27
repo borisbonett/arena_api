@@ -1,0 +1,28 @@
+# config/locales/es.yml
+es:
+  errors:
+    messages:
+      blank: "no puede estar en blanco"
+      too_short:
+        one: "es demasiado corto (mínimo %{count} carácter)"
+        other: "es demasiado corto (mínimo %{count} caracteres)"
+      taken: "ya está en uso"
+      invalid: "no es válido"
+
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "La validación falló: %{errors}"
+    models:
+      user: "Usuario"
+      product: "Producto"
+    attributes:
+      user:
+        name: "El nombre"
+        email: "El correo electrónico"
+        password: "La contraseña"
+        password_confirmation: "La confirmación de la contraseña"
+      product:
+        name: "El nombre del producto"
+        price: "El precio"
+        description: "La descripción"
