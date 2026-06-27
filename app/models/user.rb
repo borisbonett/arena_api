@@ -12,6 +12,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
   validates :role, inclusion: { in: %w[admin user] }
+  validates :password, presence: true, length: { minimum: 6 }
 
   # Método para verificar si el usuario es admin
   def admin?

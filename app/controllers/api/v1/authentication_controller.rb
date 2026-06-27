@@ -2,6 +2,13 @@ class Api::V1::AuthenticationController < ApplicationController
   skip_before_action :authorize_request, only: :login
 
   def login
+
+    # logger.info "--- MIS PARÁMETROS: #{params.inspect} ---"
+
+    if params[:email].blank? || params[:password].blank?
+      return render json: { error: 'El correo y la contraseña son obligatorios' }, status: :bad_request
+    end
+
     @user = User.find_by_email(params[:email])
     if @user&.authenticate(params[:password])
       token = JsonWebToken.encode(user_id: @user.id)
