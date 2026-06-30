@@ -5,8 +5,15 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /api/v1/products (Público)
   def index
-    @products = Product.all
-    render json: @products.map { |p| product_with_image(p) }, status: :ok
+    @pagy, @products = pagy(Product.all.order(created_at: :desc))
+
+    # Mapeamos cada producto usando tu método auxiliar 'product_with_image'
+    products_json = @products.map { |product| product_with_image(product) }
+
+    render json: {
+      products: products_json,
+      pagy: pagy_metadata(@pagy)
+    }
   end
 
   # GET /api/v1/products/:id (Público)
@@ -26,13 +33,13 @@ class Api::V1::ProductsController < ApplicationController
 
   # PUT/PATCH /api/v1/products/:id (Solo Admin)
   def update
+    # Corrección opcional: Es mejor validar el stock antes de hacer el update permanente
+    if product_params[:stock].to_i < 0
+      render json: { errors: ["El stock no puede ser menor a 0"] }, status: :unprocessable_entity
+      return
+    end
+
     if @product.update(product_params)
-
-      if @product.stock.to_i <= 0
-        render json: { errors: "El stock debe ser mayor a 0" }, status: :unprocessable_entity
-        return
-      end
-
       render json: product_with_image(@product), status: :ok
     else
       render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
@@ -52,7 +59,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def product_params
-    # Permite recibir la foto del producto (`image`) desde el ordenador
+    # Cambiado :quantity por :stock para alinearse con tus campos del backend
     params.permit(:name, :price, :description, :image, :stock)
   end
 

@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
 
+  include Pagy::Backend
+
   before_action :authorize_request
 
   def authorize_request
