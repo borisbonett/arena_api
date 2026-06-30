@@ -1,2 +1,2 @@
 require 'pagy/extras/metadata'
-Pagy::DEFAULT[:items] = 10
+Pagy::DEFAULT[:items] = 20
