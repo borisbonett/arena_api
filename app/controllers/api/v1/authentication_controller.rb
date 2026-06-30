@@ -23,7 +23,7 @@ class Api::V1::AuthenticationController < ApplicationController
         exp: time.strftime("%Y-%m-%d %H:%M"), 
         role: @user.role, 
         username: @user.name,
-        avatar_url: avatar_url # <--- Enviamos la ruta al frontend
+        avatar_url: avatar_url
       }, status: :ok
     else
       render json: { error: 'Credenciales incorrectas' }, status: :unauthorized
