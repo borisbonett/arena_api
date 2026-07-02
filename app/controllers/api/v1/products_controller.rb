@@ -5,14 +5,25 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /api/v1/products (Público)
   def index
-    @pagy, @products = pagy(Product.all.order(created_at: :desc))
-
-    # Mapeamos cada producto usando tu método auxiliar 'product_with_image'
+    page = params[:page].to_i.positive? ? params[:page].to_i : 1
+    items_per_page = 10
+    offset = (page - 1) * items_per_page
+    
+    total_count = Product.count
+    @products = Product.order(created_at: :desc).limit(items_per_page).offset(offset)
+    
     products_json = @products.map { |product| product_with_image(product) }
+    
+    total_pages = (total_count / items_per_page.to_f).ceil
 
     render json: {
       products: products_json,
-      pagy: pagy_metadata(@pagy)
+      pagination: {
+        current_page: page,
+        total_pages: total_pages,
+        total_items: total_count,
+        items_per_page: items_per_page
+      }
     }
   end
 
